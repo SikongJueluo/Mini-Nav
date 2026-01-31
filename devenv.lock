@@ -92,7 +92,9 @@
     "nixgl": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1762090880,
@@ -108,20 +110,6 @@
       }
     },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1769664171,
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "effc419e5e4bddeda827eb688347bef40733bc1c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
       "locked": {
         "lastModified": 1767052823,
         "owner": "cachix",
@@ -141,7 +129,7 @@
         "devenv": "devenv",
         "git-hooks": "git-hooks",
         "nixgl": "nixgl",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "pre-commit-hooks": [
           "git-hooks"
         ]

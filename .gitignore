@@ -208,6 +208,7 @@ __marimo__/
 # Projects
 data/
 deps/
+outputs/
 
 # Devenv
 .devenv*
