@@ -1,7 +1,7 @@
 """Image loading and preprocessing utilities."""
 
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 import requests
 from PIL import Image
@@ -52,7 +52,7 @@ def preprocess_image(image: Image.Image, size: int = 224) -> Image.Image:
 
 
 def load_images_from_directory(
-    dir_path: Union[str, Path], extensions: List[str] = None
+    dir_path: Union[str, Path], extensions: Optional[List[str]] = None
 ) -> List[Image.Image]:
     """Load all images from a directory.
 

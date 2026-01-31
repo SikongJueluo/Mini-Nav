@@ -209,6 +209,7 @@ __marimo__/
 data/
 deps/
 outputs/
+.sisyphus
 
 # Devenv
 .devenv*
