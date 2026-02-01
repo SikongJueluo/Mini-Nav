@@ -39,9 +39,7 @@ in {
 
   # https://devenv.sh/basics/
   enterShell = ''
-    eval "$(micromamba shell hook --shell bash)"
-    micromamba activate ./.venv
-    export PATH=$PATH:/home/sikongjueluo/Projects/Mini-Nav
+    source ./.venv/bin/activate
   '';
 
   # https://devenv.sh/tasks/
