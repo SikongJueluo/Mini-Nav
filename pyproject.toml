@@ -7,8 +7,11 @@ requires-python = ">=3.10"
 dependencies = [
     "accelerate>=1.12.0",
     "datasets>=4.5.0",
-    "h5py>=3.15.1",
     "httpx[socks]>=0.28.1",
+    "lancedb>=0.27.1",
+    "polars[database,numpy,pandas,pydantic]>=1.37.1",
+    "pyarrow>=23.0.0",
+    "pydantic>=2.12.5",
     "torch>=2.10.0",
     "torchvision>=0.25.0",
     "transformers>=5.0.0",

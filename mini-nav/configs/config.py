@@ -1,10 +1,15 @@
 """Configuration manager for multiple configurations."""
 
+from enum import Enum
 from pathlib import Path
 from typing import Dict, Optional
 
 from .loader import load_yaml, save_yaml
 from .models import FeatureCompressorConfig
+
+
+class ConfigType(str, Enum):
+    FeatureCompressor = "feature_compressor"
 
 
 class ConfigManager:
@@ -21,9 +26,7 @@ class ConfigManager:
     def __init__(self):
         self.config_dir = Path(__file__).parent
 
-    def load_config(
-        self, config_name: str = "feature_compressor"
-    ) -> FeatureCompressorConfig:
+    def load_config(self, config_name: ConfigType) -> FeatureCompressorConfig:
         """Load configuration from YAML file.
 
         Args:
@@ -56,9 +59,7 @@ class ConfigManager:
         self._configs.update(loaded_configs)
         return loaded_configs
 
-    def get_config(
-        self, config_name: str = "feature_compressor"
-    ) -> FeatureCompressorConfig:
+    def get_config(self, config_name: ConfigType) -> FeatureCompressorConfig:
         """Get loaded configuration by name.
 
         Args:
@@ -77,9 +78,7 @@ class ConfigManager:
             )
         return self._configs[config_name]
 
-    def get_or_load_config(
-        self, config_name: str = "feature_compressor"
-    ) -> FeatureCompressorConfig:
+    def get_or_load_config(self, config_name: ConfigType) -> FeatureCompressorConfig:
         """Get loaded configuration by name or load it if not loaded.
 
         Args:
@@ -105,7 +104,7 @@ class ConfigManager:
 
     def save_config(
         self,
-        config_name: str = "feature_compressor",
+        config_name: ConfigType,
         config: Optional[FeatureCompressorConfig] = None,
         path: Optional[Path] = None,
     ) -> None:
