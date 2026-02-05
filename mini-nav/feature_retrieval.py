@@ -1,8 +1,10 @@
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional, Union, cast
 
+import polars as pl
 import torch
 from database import db_manager
-from datasets import Dataset, load_dataset
+from datasets import load_dataset
+from PIL import Image
 from tqdm.auto import tqdm
 from transformers import AutoImageProcessor, AutoModel
 
@@ -101,10 +103,37 @@ class FeatureRetrieval:
                 ]
             )
 
+    @torch.no_grad()
+    def extract_single_image_feature(self, image: Union[Image.Image, Any]) -> pl.Series:
+        """Extract feature from a single image without storing to database.
+
+        Args:
+            image: A single image (PIL Image or other supported format).
+
+        Returns:
+            pl.Series: The extracted CLS token feature vector as a Polars Series.
+        """
+        device = self.model.device
+        self.model.eval()
+
+        # 预处理图片
+        inputs = self.processor(images=image, return_tensors="pt")
+        inputs.to(device, non_blocking=True)
+
+        # 提取特征
+        outputs = self.model(**inputs)
+
+        # 获取 CLS token
+        feats = outputs.last_hidden_state  # [1, N, D]
+        cls_token = feats[:, 0]  # [1, D]
+        cls_token = cast(torch.Tensor, cls_token)
+
+        # 返回 Polars Series
+        return pl.Series("feature", cls_token.cpu().squeeze(0).tolist())
+
 
 if __name__ == "__main__":
     train_dataset = load_dataset("uoft-cs/cifar10", split="train")
-    train_dataset = cast(Dataset, train_dataset)
     label_map = [
         "airplane",
         "automobile",
