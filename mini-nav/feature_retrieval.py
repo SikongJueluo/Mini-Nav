@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Union, cast
 
-import polars as pl
 import torch
 from database import db_manager
 from datasets import load_dataset
@@ -104,7 +103,9 @@ class FeatureRetrieval:
             )
 
     @torch.no_grad()
-    def extract_single_image_feature(self, image: Union[Image.Image, Any]) -> pl.Series:
+    def extract_single_image_feature(
+        self, image: Union[Image.Image, Any]
+    ) -> List[float]:
         """Extract feature from a single image without storing to database.
 
         Args:
@@ -128,8 +129,8 @@ class FeatureRetrieval:
         cls_token = feats[:, 0]  # [1, D]
         cls_token = cast(torch.Tensor, cls_token)
 
-        # 返回 Polars Series
-        return pl.Series("feature", cls_token.cpu().squeeze(0).tolist())
+        # 返回 CLS List
+        return cls_token.cpu().squeeze(0).tolist()
 
 
 if __name__ == "__main__":

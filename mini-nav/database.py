@@ -1,4 +1,5 @@
 from typing import Optional
+
 import lancedb
 import pyarrow as pa
 from configs import cfg_manager
@@ -31,7 +32,7 @@ class DatabaseManager:
 
         # 初始化数据库与表格
         self.db = lancedb.connect(db_path)
-        if "default" not in self.db.table_names():
+        if "default" not in self.db.list_tables().tables:
             self.table = self.db.create_table("default", schema=db_schema)
         else:
             self.table = self.db.open_table("default")
