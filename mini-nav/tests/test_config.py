@@ -141,10 +141,8 @@ class TestYamlLoader:
     """Test suite for YAML loading and saving."""
 
     def test_load_existing_yaml(self):
-        """Load feature_compressor.yaml and verify values."""
-        config_path = (
-            Path(__file__).parent.parent / "configs" / "feature_compressor.yaml"
-        )
+        """Load config.yaml and verify values."""
+        config_path = Path(__file__).parent.parent / "configs" / "config.yaml"
         config = load_yaml(config_path, FeatureCompressorConfig)
 
         # Verify model config
@@ -185,7 +183,7 @@ class TestYamlLoader:
 
     def test_save_yaml_roundtrip(self):
         """Create config, save to temp, verify file exists with content."""
-        original = cfg_manager.load_config("feature_compressor")
+        original = cfg_manager.load()
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             temp_path = Path(f.name)
@@ -220,23 +218,22 @@ class TestConfigManager:
         assert manager1 is manager2
 
     def test_load_config(self):
-        """Test loading feature_compressor config."""
-        config = cfg_manager.load_config("feature_compressor")
+        """Test loading default config."""
+        config = cfg_manager.load()
 
         assert config is not None
         assert config.model.compression_dim == 256
         assert config.visualization.point_size == 8
 
-    def test_get_config_not_loaded(self):
-        """Test that get_config() raises error for unloaded config."""
-        with pytest.raises(ValueError, match="not loaded"):
-            cfg_manager.get_config("nonexistent_config")
+    def test_get_without_load(self):
+        """Test that get() auto-loads config if not loaded."""
+        # Reset the singleton's cached config
+        cfg_manager._config = None
 
-    def test_list_configs(self):
-        """Test listing all loaded configurations."""
-        cfg_manager.load_config("feature_compressor")
-        configs = cfg_manager.list_configs()
-        assert "feature_compressor" in configs
+        # get() should auto-load
+        config = cfg_manager.get()
+        assert config is not None
+        assert config.model.compression_dim == 256
 
     def test_save_config(self):
         """Test saving configuration to file."""
@@ -250,7 +247,7 @@ class TestConfigManager:
             temp_path = Path(f.name)
 
         try:
-            cfg_manager.save_config("test_config", config, path=temp_path)
+            cfg_manager.save(config, path=temp_path)
             loaded_config = load_yaml(temp_path, FeatureCompressorConfig)
 
             assert loaded_config.model.compression_dim == 512

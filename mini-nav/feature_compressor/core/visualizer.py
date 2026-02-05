@@ -43,7 +43,7 @@ class FeatureVisualizer:
             Configuration Pydantic model
         """
         if config_path is None:
-            return cfg_manager.get_or_load_config("feature_compressor")
+            return cfg_manager.get()
         else:
             return load_yaml(Path(config_path), FeatureCompressorConfig)
 

@@ -8,7 +8,6 @@ from .models import (
 from .loader import load_yaml, save_yaml, ConfigError
 from .config import (
     ConfigManager,
-    ConfigType,
     cfg_manager,
 )
 
@@ -25,6 +24,5 @@ __all__ = [
     "ConfigError",
     # Manager
     "ConfigManager",
-    "ConfigType",
     "cfg_manager",
 ]

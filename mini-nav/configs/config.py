@@ -1,134 +1,80 @@
-"""Configuration manager for multiple configurations."""
+"""Configuration manager for unified config."""
 
-from enum import Enum
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Optional
 
 from .loader import load_yaml, save_yaml
 from .models import FeatureCompressorConfig
 
 
-class ConfigType(str, Enum):
-    FeatureCompressor = "feature_compressor"
-
-
 class ConfigManager:
-    """Singleton configuration manager supporting multiple configs."""
+    """Singleton configuration manager for unified config."""
 
     _instance: Optional["ConfigManager"] = None
-    _configs: Dict[str, FeatureCompressorConfig] = {}
+    _config: Optional[FeatureCompressorConfig] = None
 
     def __new__(cls) -> "ConfigManager":
+        """Singleton pattern - ensure only one instance exists."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self):
+        """Initialize config manager with config directory and path."""
         self.config_dir = Path(__file__).parent
+        self.config_path = self.config_dir / "config.yaml"
 
-    def load_config(self, config_name: ConfigType) -> FeatureCompressorConfig:
-        """Load configuration from YAML file.
-
-        Args:
-            config_name: Name of config file without extension
+    def load(self) -> FeatureCompressorConfig:
+        """Load configuration from config.yaml file.
 
         Returns:
             Loaded and validated FeatureCompressorConfig instance
         """
-        config_path = self.config_dir / f"{config_name}.yaml"
-        config = load_yaml(config_path, FeatureCompressorConfig)
-        self._configs[config_name] = config
+        config = load_yaml(self.config_path, FeatureCompressorConfig)
+        self._config = config
         return config
 
-    def load_all_configs(self) -> Dict[str, FeatureCompressorConfig]:
-        """Load all YAML configuration files from config directory.
-
-        Returns:
-            Dictionary mapping config names to FeatureCompressorConfig instances
-        """
-        config_files = list(self.config_dir.glob("*.yaml"))
-        loaded_configs = {}
-
-        for config_path in config_files:
-            config_name = config_path.stem
-            if config_name.startswith("_"):
-                continue  # Skip private configs
-            config = load_yaml(config_path, FeatureCompressorConfig)
-            loaded_configs[config_name] = config
-
-        self._configs.update(loaded_configs)
-        return loaded_configs
-
-    def get_config(self, config_name: ConfigType) -> FeatureCompressorConfig:
-        """Get loaded configuration by name.
-
-        Args:
-            config_name: Name of configuration to retrieve
+    def get(self) -> FeatureCompressorConfig:
+        """Get loaded configuration, auto-loading if not already loaded.
 
         Returns:
             FeatureCompressorConfig instance
 
-        Raises:
-            ValueError: If configuration not loaded
+        Note:
+            Automatically loads config if not already loaded
         """
-        if config_name not in self._configs:
-            raise ValueError(
-                f"Configuration '{config_name}' not loaded. "
-                f"Call load_config('{config_name}') or load_all_configs() first."
-            )
-        return self._configs[config_name]
+        # Auto-load if config not yet loaded
+        if self._config is None:
+            return self.load()
+        return self._config
 
-    def get_or_load_config(self, config_name: ConfigType) -> FeatureCompressorConfig:
-        """Get loaded configuration by name or load it if not loaded.
-
-        Args:
-            config_name: Name of configuration to retrieve
-
-        Returns:
-            FeatureCompressorConfig instance
-
-        Raises:
-            ValueError: If configuration not loaded
-        """
-        if config_name not in self._configs:
-            return self.load_config(config_name)
-        return self._configs[config_name]
-
-    def list_configs(self) -> list[str]:
-        """List names of all currently loaded configurations.
-
-        Returns:
-            List of configuration names
-        """
-        return list(self._configs.keys())
-
-    def save_config(
+    def save(
         self,
-        config_name: ConfigType,
         config: Optional[FeatureCompressorConfig] = None,
         path: Optional[Path] = None,
     ) -> None:
         """Save configuration to YAML file.
 
         Args:
-            config_name: Name of config file without extension
-            config: Configuration to save. If None, saves currently loaded config for that name.
-            path: Optional custom path to save to. If None, saves to config_dir.
+            config: Configuration to save. If None, saves currently loaded config.
+            path: Optional custom path. If None, saves to default config.yaml.
 
         Raises:
-            ValueError: If no configuration loaded for the given name and config is None
+            ValueError: If no configuration loaded and config is None
         """
+        # Use provided config or fall back to loaded config
         if config is None:
-            if config_name not in self._configs:
+            if self._config is None:
                 raise ValueError(
-                    f"No configuration loaded for '{config_name}'. "
-                    f"Cannot save without providing config parameter."
+                    "No configuration loaded. "
+                    "Cannot save without providing config parameter."
                 )
-            config = self._configs[config_name]
+            config = self._config
 
-        save_path = path if path else self.config_dir / f"{config_name}.yaml"
+        # Save to custom path or default config.yaml
+        save_path = path if path else self.config_path
         save_yaml(save_path, config)
-        self._configs[config_name] = config
+        self._config = config
 
 
 # Global singleton instance

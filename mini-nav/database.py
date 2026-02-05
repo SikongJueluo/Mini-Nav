@@ -1,8 +1,7 @@
-from pathlib import Path
 from typing import Optional
 import lancedb
 import pyarrow as pa
-from configs import ConfigType, cfg_manager
+from configs import cfg_manager
 
 db_schema = pa.schema(
     [
@@ -27,7 +26,7 @@ class DatabaseManager:
 
     def __init__(self):
         # 获取数据库位置
-        config = cfg_manager.get_or_load_config(ConfigType.FeatureCompressor)
+        config = cfg_manager.get()
         db_path = config.output.directory / "database"
 
         # 初始化数据库与表格
