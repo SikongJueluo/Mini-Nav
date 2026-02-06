@@ -9,6 +9,7 @@ db_schema = pa.schema(
         pa.field("id", pa.int32()),
         pa.field("label", pa.string()),
         pa.field("vector", pa.list_(pa.float32(), 1024)),
+        pa.field("binary", pa.binary()),
     ]
 )
 

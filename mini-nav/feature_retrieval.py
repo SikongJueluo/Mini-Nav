@@ -4,6 +4,7 @@ import torch
 from database import db_manager
 from datasets import load_dataset
 from PIL import Image
+from PIL.PngImagePlugin import PngImageFile
 from tqdm.auto import tqdm
 from transformers import AutoImageProcessor, AutoModel
 
@@ -48,7 +49,7 @@ class FeatureRetrieval:
     @torch.no_grad()
     def establish_database(
         self,
-        images: List[Any],
+        images: List[PngImageFile],
         labels: List[int] | List[str],
         batch_size: int = 64,
         label_map: Optional[Dict[int, str] | List[str]] = None,
@@ -97,6 +98,7 @@ class FeatureRetrieval:
                         "id": i + j,
                         "label": batch_labels[j],
                         "vector": cls_tokens[j].numpy(),
+                        "binary": batch_imgs[j].tobytes(),
                     }
                     for j in range(actual_batch_size)
                 ]
