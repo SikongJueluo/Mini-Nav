@@ -1,3 +1,4 @@
+import io
 from typing import Any, Dict, List, Optional, Union, cast
 
 import torch
@@ -7,6 +8,21 @@ from PIL import Image
 from PIL.PngImagePlugin import PngImageFile
 from tqdm.auto import tqdm
 from transformers import AutoImageProcessor, AutoModel
+
+
+def pil_image_to_bytes(image: Image.Image, format: str = "PNG") -> bytes:
+    """Convert a PIL Image to bytes in the specified format.
+
+    Args:
+        image: PIL Image to convert.
+        format: Image format (e.g., 'PNG', 'JPEG').
+
+    Returns:
+        bytes: The encoded image bytes.
+    """
+    buffer = io.BytesIO()
+    image.save(buffer, format=format)
+    return buffer.getvalue()
 
 
 class FeatureRetrieval:
@@ -98,7 +114,7 @@ class FeatureRetrieval:
                         "id": i + j,
                         "label": batch_labels[j],
                         "vector": cls_tokens[j].numpy(),
-                        "binary": batch_imgs[j].tobytes(),
+                        "binary": pil_image_to_bytes(batch_imgs[j]),
                     }
                     for j in range(actual_batch_size)
                 ]

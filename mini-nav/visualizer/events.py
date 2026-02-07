@@ -1,9 +1,7 @@
-from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Optional, TypedDict, Union
 
 
-@dataclass
-class CellClickedEvent:
+class CellClickedEvent(TypedDict):
     """
     - value (boolean I number | string I dict | list; optional): value of the clicked cell.
     - colId (boolean I number I string I dict | list; optional): column where the cell was clicked.
