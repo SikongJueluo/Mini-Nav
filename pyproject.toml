@@ -15,6 +15,7 @@ dependencies = [
     "polars[database,numpy,pandas,pydantic]>=1.37.1",
     "pyarrow>=23.0.0",
     "pydantic>=2.12.5",
+    "pytest-benchmark>=5.2.3",
     "scikit-learn>=1.7.2",
     "torch>=2.10.0",
     "torchvision>=0.25.0",
