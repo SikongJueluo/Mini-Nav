@@ -1,22 +1,20 @@
-from .models import (
-    ModelConfig,
-    VisualizationConfig,
-    OutputConfig,
-    FeatureCompressorConfig,
-    PoolingType,
-)
-from .loader import load_yaml, save_yaml, ConfigError
 from .config import (
     ConfigManager,
     cfg_manager,
+)
+from .loader import ConfigError, load_yaml, save_yaml
+from .models import (
+    Config,
+    ModelConfig,
+    OutputConfig,
+    PoolingType,
 )
 
 __all__ = [
     # Models
     "ModelConfig",
-    "VisualizationConfig",
     "OutputConfig",
-    "FeatureCompressorConfig",
+    "Config",
     "PoolingType",
     # Loader
     "load_yaml",

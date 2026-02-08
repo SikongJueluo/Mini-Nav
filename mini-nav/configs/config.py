@@ -4,14 +4,14 @@ from pathlib import Path
 from typing import Optional
 
 from .loader import load_yaml, save_yaml
-from .models import FeatureCompressorConfig
+from .models import Config
 
 
 class ConfigManager:
     """Singleton configuration manager for unified config."""
 
     _instance: Optional["ConfigManager"] = None
-    _config: Optional[FeatureCompressorConfig] = None
+    _config: Optional[Config] = None
 
     def __new__(cls) -> "ConfigManager":
         """Singleton pattern - ensure only one instance exists."""
@@ -24,17 +24,17 @@ class ConfigManager:
         self.config_dir = Path(__file__).parent
         self.config_path = self.config_dir / "config.yaml"
 
-    def load(self) -> FeatureCompressorConfig:
+    def load(self) -> Config:
         """Load configuration from config.yaml file.
 
         Returns:
             Loaded and validated FeatureCompressorConfig instance
         """
-        config = load_yaml(self.config_path, FeatureCompressorConfig)
+        config = load_yaml(self.config_path, Config)
         self._config = config
         return config
 
-    def get(self) -> FeatureCompressorConfig:
+    def get(self) -> Config:
         """Get loaded configuration, auto-loading if not already loaded.
 
         Returns:
@@ -50,7 +50,7 @@ class ConfigManager:
 
     def save(
         self,
-        config: Optional[FeatureCompressorConfig] = None,
+        config: Optional[Config] = None,
         path: Optional[Path] = None,
     ) -> None:
         """Save configuration to YAML file.
