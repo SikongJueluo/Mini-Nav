@@ -93,12 +93,10 @@ def train(
                 with torch.no_grad():
                     inputs = processor(imgs, return_tensors="pt").to(device)
 
-                    teacher_tokens = dino(**inputs).last_hidden_state
-                    # [B,N,1024]
+                    teacher_tokens = dino(**inputs).last_hidden_state  # [B,N,1024]
 
                     teacher_embed = teacher_tokens.mean(dim=1)
-                    teacher_embed = F.normalize(teacher_embed, dim=-1)
-                    # [B,1024]
+                    teacher_embed = F.normalize(teacher_embed, dim=-1)  # [B,1024]
 
                 # ---- student forward ----
                 z512, recon = compressor(teacher_tokens)
