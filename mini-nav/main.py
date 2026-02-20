@@ -10,9 +10,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.action == "train":
-        from compressors import FloatCompressor, train
+        from compressors import train
 
-        train(FloatCompressor(), 1, 32)
+        # 启动训练
+        train(
+            epoch_size=10, batch_size=64, lr=1e-4, checkpoint_path="hash_checkpoint.pt"
+        )
     elif args.action == "benchmark":
         from benchmarks import evaluate
 

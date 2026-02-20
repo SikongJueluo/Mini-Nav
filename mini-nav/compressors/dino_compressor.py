@@ -6,6 +6,12 @@ from transformers import AutoModel, Dinov2Model
 
 
 class DinoCompressor(nn.Module):
+    """DINOv2 feature extractor with optional hash compression.
+
+    When compressor is None: returns normalized DINO embeddings.
+    When compressor is provided: returns binary hash bits for CAM storage.
+    """
+
     def __init__(self, compressor: Optional[nn.Module] = None):
         super().__init__()
 
@@ -25,5 +31,6 @@ class DinoCompressor(nn.Module):
         if self.compressor is None:
             return teacher_embed
 
-        feats, recon = self.compressor(teacher_tokens)
-        return feats
+        # HashCompressor returns (logits, hash_codes, bits)
+        _, _, bits = self.compressor(teacher_tokens)
+        return bits  # [B, 512] binary bits for CAM
