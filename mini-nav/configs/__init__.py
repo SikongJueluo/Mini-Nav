@@ -1,3 +1,5 @@
+"""Configuration management module for unified config."""
+
 from .config import (
     ConfigManager,
     cfg_manager,
@@ -8,7 +10,6 @@ from .models import (
     DatasetConfig,
     ModelConfig,
     OutputConfig,
-    PoolingType,
 )
 
 __all__ = [
@@ -17,7 +18,6 @@ __all__ = [
     "OutputConfig",
     "DatasetConfig",
     "Config",
-    "PoolingType",
     # Loader
     "load_yaml",
     "save_yaml",

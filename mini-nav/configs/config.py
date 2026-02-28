@@ -28,7 +28,7 @@ class ConfigManager:
         """Load configuration from config.yaml file.
 
         Returns:
-            Loaded and validated FeatureCompressorConfig instance
+            Loaded and validated Config instance
         """
         config = load_yaml(self.config_path, Config)
         self._config = config
@@ -38,7 +38,7 @@ class ConfigManager:
         """Get loaded configuration, auto-loading if not already loaded.
 
         Returns:
-            FeatureCompressorConfig instance
+            Config instance
 
         Note:
             Automatically loads config if not already loaded

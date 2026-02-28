@@ -57,7 +57,11 @@ class ImageSynthesizer:
         """List of background image paths."""
         if self._background_categories is None:
             self._background_categories = sorted(
-                [p.name for p in self.background_dir.iterdir() if p.suffix in [".jpg", ".jpeg", ".png"]]
+                [
+                    p.name
+                    for p in self.background_dir.iterdir()
+                    if p.suffix in [".jpg", ".jpeg", ".png"]
+                ]
             )
         # Return as list of Path for type compatibility
         return [self.background_dir / name for name in self._background_categories]  # type: ignore[return-value]
@@ -126,7 +130,9 @@ class ImageSynthesizer:
         mask = mask.rotate(angle, resample=Resampling.BILINEAR, expand=True)
         return image, mask
 
-    def _compute_overlap(self, box1: tuple[int, int, int, int], box2: tuple[int, int, int, int]) -> float:
+    def _compute_overlap(
+        self, box1: tuple[int, int, int, int], box2: tuple[int, int, int, int]
+    ) -> float:
         """Compute overlap ratio between two boxes.
 
         Args:
@@ -153,7 +159,26 @@ class ImageSynthesizer:
         box2_area = (x2_max - x2_min) * (y2_max - y2_min)
         min_area = min(box1_area, box2_area)
 
-        return inter_area / min_area if min_area > 0 else 0.0
+        return inter_area / (min_area if min_area > 0 else 0.0)
+
+    def _has_overlap(
+        self,
+        new_box: tuple[int, int, int, int],
+        existing_boxes: list[tuple[int, int, int, int]],
+    ) -> bool:
+        """Check if new_box overlaps with any existing boxes.
+
+        Args:
+            new_box: The new bounding box (xmin, ymin, xmax, ymax)
+            existing_boxes: List of existing bounding boxes
+
+        Returns:
+            True if any overlap exceeds threshold, False otherwise
+        """
+        for existing_box in existing_boxes:
+            if self._compute_overlap(new_box, existing_box) > self.overlap_threshold:
+                return True
+        return False
 
     def _place_object(
         self,
@@ -182,7 +207,7 @@ class ImageSynthesizer:
         new_w = int(obj_w * scale)
         new_h = int(obj_h * scale)
 
-        if new_w <= 0 or new_h <= 0:
+        if new_w <= 0 or new_h <= 0 or new_w > bg_w or new_h > bg_h:
             return None
 
         obj_image = obj_image.resize((new_w, new_h), Resampling.LANCZOS)
@@ -198,32 +223,18 @@ class ImageSynthesizer:
             new_box = (x, y, x + new_w, y + new_h)
 
             # Check overlap with existing boxes
-            valid = True
-            for existing_box in existing_boxes:
-                overlap = self._compute_overlap(new_box, existing_box)
-                if overlap > self.overlap_threshold:
-                    valid = False
-                    break
-
-            if valid:
-                # Composite object onto background
+            if not self._has_overlap(new_box, existing_boxes):
+                # Composite object onto background using Pillow's paste method
                 background = background.copy()
-                mask_array = np.array(obj_mask) / 255.0
-                bg_array = np.array(background)
-                obj_array = np.array(obj_image)
+                background.paste(obj_image, (x, y), mask=obj_mask)
 
-                # Apply mask
-                mask_3d = np.stack([mask_array] * 3, axis=-1)
-                bg_array[y:y+new_h, x:x+new_w] = (
-                    bg_array[y:y+new_h, x:x+new_w] * (1 - mask_3d) +
-                    obj_array * mask_3d
-                )
-
-                return Image.fromarray(bg_array), obj_mask, new_box
+                return background, obj_mask, new_box
 
         return None
 
-    def synthesize_scene(self) -> tuple[Image.Image, list[tuple[str, int, int, int, int]]]:
+    def synthesize_scene(
+        self,
+    ) -> tuple[Image.Image, list[tuple[str, int, int, int, int]]]:
         """Synthesize a single scene with random objects.
 
         Returns:
@@ -251,10 +262,14 @@ class ImageSynthesizer:
 
             # Get random rotation
             angle = random.uniform(*self.rotation_range)
-            obj_image, obj_mask = self._rotate_image_and_mask(obj_image, obj_mask, angle)
+            obj_image, obj_mask = self._rotate_image_and_mask(
+                obj_image, obj_mask, angle
+            )
 
             # Try to place object
-            result = self._place_object(background, obj_image, obj_mask, placed_boxes, scale)
+            result = self._place_object(
+                background, obj_image, obj_mask, placed_boxes, scale
+            )
 
             if result is not None:
                 background, _, box = result
@@ -286,7 +301,7 @@ class ImageSynthesizer:
 
             # Save annotation
             anno_path = self.output_dir / f"synth_{i:04d}.txt"
-            with open(anno_path, "w") as f:
+            with open(anno_path, "w", encoding="utf-8") as f:
                 for category, xmin, ymin, xmax, ymax in annotations:
                     f.write(f"{category} {xmin} {ymin} {xmax} {ymax}\n")
 

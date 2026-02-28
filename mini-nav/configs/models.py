@@ -26,8 +26,8 @@ class OutputConfig(BaseModel):
 
     @field_validator("directory", mode="after")
     def convert_to_absolute(cls, v: Path) -> Path:
-        """
-        Converts the path to an absolute path relative to the current working directory.
+        """Converts the path to an absolute path relative to the project root.
+
         This works even if the path doesn't exist on disk.
         """
         if v.is_absolute():
@@ -55,8 +55,8 @@ class DatasetConfig(BaseModel):
 
     @field_validator("dataset_root", "output_dir", mode="after")
     def convert_to_absolute(cls, v: Path) -> Path:
-        """
-        Converts the path to an absolute path relative to the project root.
+        """Converts the path to an absolute path relative to the project root.
+
         This works even if the path doesn't exist on disk.
         """
         if v.is_absolute():
