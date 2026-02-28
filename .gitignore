@@ -207,11 +207,11 @@ __marimo__/
 
 # Projects
 datasets/
-!mini-nav/**/datasets/
 data/
 deps/
 outputs/
 .sisyphus
+.claude/
 
 # Devenv
 .devenv*
