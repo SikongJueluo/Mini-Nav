@@ -5,3 +5,13 @@ model:
 
 output:
   directory: "./outputs"
+
+dataset:
+  dataset_root: "datasets/InsDet-FULL"
+  output_dir: "datasets/InsDet-FULL/Synthesized"
+  num_objects_range: [3, 8]
+  num_scenes: 1000
+  object_scale_range: [0.1, 0.4]
+  rotation_range: [-30, 30]
+  overlap_threshold: 0.3
+  seed: 42
