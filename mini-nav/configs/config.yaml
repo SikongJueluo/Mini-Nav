@@ -2,10 +2,10 @@ model:
   name: "facebook/dinov2-large"
   compression_dim: 512
   device: "auto" # auto-detect GPU
-  sam_model: "facebook/sam2.1-hiera-large"  # SAM model name
-  sam_min_mask_area: 100  # Minimum mask area threshold
-  sam_max_masks: 10  # Maximum number of masks to keep
-  compressor_path: null  # Path to trained HashCompressor weights (optional)
+  sam_model: "facebook/sam2.1-hiera-large" # SAM model name
+  sam_min_mask_area: 100 # Minimum mask area threshold
+  sam_max_masks: 10 # Maximum number of masks to keep
+  compressor_path: null # Path to trained HashCompressor weights (optional)
 
 output:
   directory: "./outputs"
@@ -19,3 +19,17 @@ dataset:
   rotation_range: [-30, 30]
   overlap_threshold: 0.3
   seed: 42
+
+benchmark:
+  enabled: true
+  dataset:
+    source_type: "huggingface"
+    path: "uoft-cs/cifar10"
+    img_column: "img"
+    label_column: "label"
+  task:
+    name: "recall_at_k"
+    type: "retrieval"
+    top_k: 10
+  batch_size: 64
+  model_table_prefix: "benchmark"

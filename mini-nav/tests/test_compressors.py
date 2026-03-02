@@ -1,26 +1,21 @@
 """Tests for compressor modules (SAM, DINO, HashCompressor, Pipeline)."""
 
-import tempfile
-from pathlib import Path
-from unittest.mock import MagicMock, patch
-
 import pytest
 import torch
-from PIL import Image
-
-from configs import cfg_manager
 from compressors import (
     BinarySign,
     DinoCompressor,
     HashCompressor,
-    SegmentCompressor,
     SAMHashPipeline,
-    create_pipeline_from_config,
+    SegmentCompressor,
     bits_to_hash,
-    hash_to_bits,
+    create_pipeline_from_config,
     hamming_distance,
     hamming_similarity,
+    hash_to_bits,
 )
+from configs import cfg_manager
+from PIL import Image
 
 
 class TestHashCompressor:
