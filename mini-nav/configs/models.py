@@ -1,6 +1,7 @@
 """Pydantic data models for feature compressor configuration."""
 
 from pathlib import Path
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -15,6 +16,19 @@ class ModelConfig(BaseModel):
         default=512, gt=0, description="Output feature dimension"
     )
     device: str = "auto"
+    sam_model: str = Field(
+        default="facebook/sam2.1-hiera-large",
+        description="SAM model name from HuggingFace",
+    )
+    sam_min_mask_area: int = Field(
+        default=100, gt=0, description="Minimum mask area threshold"
+    )
+    sam_max_masks: int = Field(
+        default=10, gt=0, description="Maximum number of masks to keep"
+    )
+    compressor_path: Optional[str] = Field(
+        default=None, description="Path to trained HashCompressor weights"
+    )
 
 
 class OutputConfig(BaseModel):
