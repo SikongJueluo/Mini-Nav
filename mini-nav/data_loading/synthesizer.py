@@ -1,11 +1,13 @@
 """Image synthesizer for generating synthetic object detection datasets."""
 
+import csv
 import random
 from pathlib import Path
 
 import numpy as np
 from PIL import Image
 from PIL.Image import Resampling
+from tqdm.auto import tqdm
 
 
 class ImageSynthesizer:
@@ -240,9 +242,6 @@ class ImageSynthesizer:
         Returns:
             Tuple of (synthesized_image, list of (category, xmin, ymin, xmax, ymax))
         """
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-
         # Load background
         background, _ = self.get_random_background()
 
@@ -288,7 +287,7 @@ class ImageSynthesizer:
 
         generated_files: list[Path] = []
 
-        for i in range(self.num_scenes):
+        for i in tqdm(range(self.num_scenes), desc="Generating scenes"):
             # Update seed for each scene
             random.seed(self.seed + i)
             np.random.seed(self.seed + i)
@@ -301,9 +300,10 @@ class ImageSynthesizer:
 
             # Save annotation
             anno_path = self.output_dir / f"synth_{i:04d}.txt"
-            with open(anno_path, "w", encoding="utf-8") as f:
+            with open(anno_path, "w", encoding="utf-8", newline="") as f:
+                writer = csv.writer(f, quoting=csv.QUOTE_ALL)
                 for category, xmin, ymin, xmax, ymax in annotations:
-                    f.write(f"{category} {xmin} {ymin} {xmax} {ymax}\n")
+                    writer.writerow([category, xmin, ymin, xmax, ymax])
 
             generated_files.append(img_path)
 
