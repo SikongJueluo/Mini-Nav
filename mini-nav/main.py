@@ -38,7 +38,7 @@ if __name__ == "__main__":
         model_cfg = config.model
         processor = cast(
             BitImageProcessorFast,
-            AutoImageProcessor.from_pretrained(model_cfg.name, device_map=device),
+            AutoImageProcessor.from_pretrained(model_cfg.dino_model, device_map=device),
         )
 
         # Load compressor weights if specified in model config
@@ -84,4 +84,6 @@ if __name__ == "__main__":
         )
 
         generated_files = synthesizer.generate()
-        print(f"Generated {len(generated_files)} synthesized images in {dataset_cfg.output_dir}")
+        print(
+            f"Generated {len(generated_files)} synthesized images in {dataset_cfg.output_dir}"
+        )

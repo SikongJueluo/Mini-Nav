@@ -11,7 +11,7 @@ class ModelConfig(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    name: str = "facebook/dinov2-large"
+    dino_model: str = "facebook/dinov2-large"
     compression_dim: int = Field(
         default=512, gt=0, description="Output feature dimension"
     )

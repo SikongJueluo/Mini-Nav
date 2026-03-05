@@ -149,9 +149,9 @@ def run_benchmark(
     sample = train_dataset[0]
     sample_image = sample["img"]
 
-    from .tasks.retrieval import _infer_vector_dim
+    from utils.feature_extractor import infer_vector_dim
 
-    vector_dim = _infer_vector_dim(processor, model, sample_image)
+    vector_dim = infer_vector_dim(processor, model, sample_image)
     print(f"Model output dimension: {vector_dim}")
 
     # Ensure table exists with correct schema

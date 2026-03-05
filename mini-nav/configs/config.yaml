@@ -30,6 +30,6 @@ benchmark:
   task:
     name: "recall_at_k"
     type: "retrieval"
-    top_k: 10
+    top_k: 1
   batch_size: 64
   model_table_prefix: "benchmark"

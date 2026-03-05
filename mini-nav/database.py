@@ -4,14 +4,16 @@ import lancedb
 import pyarrow as pa
 from configs import cfg_manager
 
-db_schema = pa.schema(
-    [
-        pa.field("id", pa.int32()),
-        pa.field("label", pa.string()),
-        pa.field("vector", pa.list_(pa.float32(), 1024)),
-        pa.field("binary", pa.binary()),
-    ]
-)
+
+def _build_database_schema():
+    return pa.schema(
+        [
+            pa.field("id", pa.int32()),
+            pa.field("label", pa.string()),
+            pa.field("vector", pa.list_(pa.float32(), 1024)),
+            pa.field("binary", pa.binary()),
+        ]
+    )
 
 
 class DatabaseManager:
@@ -34,7 +36,9 @@ class DatabaseManager:
         # 初始化数据库与表格
         self.db = lancedb.connect(db_path)
         if "default" not in self.db.list_tables().tables:
-            self.table = self.db.create_table("default", schema=db_schema)
+            self.table = self.db.create_table(
+                "default", schema=_build_database_schema()
+            )
         else:
             self.table = self.db.open_table("default")
 

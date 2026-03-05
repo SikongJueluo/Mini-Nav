@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from typing import Any, Protocol
 
 import lancedb
-from torch.utils.data import DataLoader
 
 
 class BaseDataset(ABC):

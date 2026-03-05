@@ -25,7 +25,7 @@ class TestConfigModels:
     def test_model_config_defaults(self):
         """Verify ModelConfig creates with correct defaults."""
         config = ModelConfig()
-        assert config.name == "facebook/dinov2-large"
+        assert config.dino_model == "facebook/dinov2-large"
         assert config.compression_dim == 512
         assert config.device == "auto"
 
@@ -73,7 +73,7 @@ class TestYamlLoader:
         config = load_yaml(config_path, Config)
 
         # Verify model config
-        assert config.model.name == "facebook/dinov2-large"
+        assert config.model.dino_model == "facebook/dinov2-large"
         assert config.model.compression_dim == 256
 
         # Verify output config
