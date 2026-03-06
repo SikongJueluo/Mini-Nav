@@ -1,6 +1,8 @@
 import typer
+from commands import app
 
 
+@app.command()
 def train(
     ctx: typer.Context,
     epoch_size: int = typer.Option(10, "--epoch", "-e", help="Number of epochs"),

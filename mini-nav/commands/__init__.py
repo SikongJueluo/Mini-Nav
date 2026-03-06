@@ -1,6 +1,7 @@
-from .train import train
+from .app import app
 from .benchmark import benchmark
-from .visualize import visualize
 from .generate import generate
+from .train import train
+from .visualize import visualize
 
-__all__ = ["train", "benchmark", "visualize", "generate"]
+__all__ = ["app", "train", "benchmark", "visualize", "generate"]

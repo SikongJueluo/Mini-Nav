@@ -1,6 +1,8 @@
 import typer
+from commands import app
 
 
+@app.command()
 def generate(ctx: typer.Context):
     from configs import cfg_manager
     from data_loading.synthesizer import ImageSynthesizer

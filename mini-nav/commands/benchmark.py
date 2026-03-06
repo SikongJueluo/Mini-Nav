@@ -1,8 +1,10 @@
 from typing import cast
 
 import typer
+from commands import app
 
 
+@app.command()
 def benchmark(
     ctx: typer.Context,
     model_path: str = typer.Option(

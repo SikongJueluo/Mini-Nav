@@ -1,6 +1,8 @@
 import typer
+from commands import app
 
 
+@app.command()
 def visualize(
     ctx: typer.Context,
     host: str = typer.Option("127.0.0.1", "--host", help="Server host"),
