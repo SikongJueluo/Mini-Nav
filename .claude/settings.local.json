@@ -1,5 +1,0 @@
-{
-  "permissions": {
-    "allow": ["Bash(uv run:*)", "mcp__fetch__fetch"]
-  }
-}

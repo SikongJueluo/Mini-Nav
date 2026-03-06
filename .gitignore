@@ -213,6 +213,7 @@ deps/
 outputs/
 .sisyphus
 .claude/
+CLAUDE.md
 
 # Devenv
 .devenv*
