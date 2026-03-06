@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from PIL.Image import Resampling
-from tqdm.auto import tqdm
+from rich.progress import track
 
 
 class ImageSynthesizer:
@@ -287,7 +287,7 @@ class ImageSynthesizer:
 
         generated_files: list[Path] = []
 
-        for i in tqdm(range(self.num_scenes), desc="Generating scenes"):
+        for i in track(range(self.num_scenes), description="Generating scenes"):
             # Update seed for each scene
             random.seed(self.seed + i)
             np.random.seed(self.seed + i)

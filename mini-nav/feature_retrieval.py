@@ -6,7 +6,7 @@ from database import db_manager
 from PIL import Image
 from PIL.PngImagePlugin import PngImageFile
 from torch import nn
-from tqdm.auto import tqdm
+from rich.progress import track
 from transformers import (
     AutoImageProcessor,
     AutoModel,
@@ -93,7 +93,7 @@ class FeatureRetrieval:
             self.processor, self.model, images, batch_size=batch_size
         )
 
-        for i in tqdm(range(len(labels)), desc="Storing to database"):
+        for i in track(range(len(labels)), description="Storing to database"):
             batch_label = labels[i] if label_map is None else label_map[labels[i]]
 
             # Store to database

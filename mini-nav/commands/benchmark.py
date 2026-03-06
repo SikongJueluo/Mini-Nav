@@ -21,13 +21,6 @@ def benchmark(
     config = cfg_manager.get()
     benchmark_cfg = config.benchmark
 
-    if not benchmark_cfg.enabled:
-        typer.echo(
-            "Benchmark is not enabled. Set benchmark.enabled=true in config.yaml",
-            err=True,
-        )
-        raise typer.Exit(code=1)
-
     device = get_device()
 
     model_cfg = config.model

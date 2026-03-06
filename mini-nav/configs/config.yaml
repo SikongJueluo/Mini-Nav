@@ -21,7 +21,6 @@ dataset:
   seed: 42
 
 benchmark:
-  enabled: true
   dataset:
     source_type: "huggingface"
     path: "uoft-cs/cifar10"

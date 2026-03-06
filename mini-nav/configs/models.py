@@ -124,7 +124,6 @@ class BenchmarkConfig(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    enabled: bool = Field(default=False, description="Enable benchmark evaluation")
     dataset: DatasetSourceConfig = Field(default_factory=DatasetSourceConfig)
     task: BenchmarkTaskConfig = Field(default_factory=BenchmarkTaskConfig)
     batch_size: int = Field(default=64, gt=0, description="Batch size for DataLoader")
