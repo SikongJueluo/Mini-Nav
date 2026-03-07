@@ -215,6 +215,7 @@ outputs/
 # Vibe Coding
 .sisyphus
 .claude/settings.local.json
+openspec/changes/
 
 # Devenv
 .devenv*

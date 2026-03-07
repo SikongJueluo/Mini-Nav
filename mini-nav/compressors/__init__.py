@@ -1,18 +1,15 @@
 from .common import BinarySign, bits_to_hash, hamming_distance, hamming_similarity, hash_to_bits
-from .dino_compressor import DinoCompressor
 from .hash_compressor import HashCompressor, HashLoss, VideoPositiveMask
-from .pipeline import SAMHashPipeline, create_pipeline_from_config
-from .segament_compressor import SegmentCompressor
+from .pipeline import HashPipeline, SAMHashPipeline, create_pipeline_from_config
 from .train import train
 
 __all__ = [
     "train",
-    "DinoCompressor",
     "HashCompressor",
     "HashLoss",
     "VideoPositiveMask",
-    "SegmentCompressor",
-    "SAMHashPipeline",
+    "HashPipeline",
+    "SAMHashPipeline",  # Backward compatibility alias
     "create_pipeline_from_config",
     "BinarySign",
     "hamming_distance",
