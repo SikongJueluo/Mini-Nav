@@ -211,9 +211,10 @@ datasets/
 data/
 deps/
 outputs/
+
+# Vibe Coding
 .sisyphus
-.claude/
-CLAUDE.md
+.claude/settings.local.json
 
 # Devenv
 .devenv*

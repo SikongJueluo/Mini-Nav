@@ -5,7 +5,6 @@ crops the objects, extracts features using DINOv2,
 and compresses them to binary hash codes using HashCompressor.
 """
 
-from pathlib import Path
 from typing import Optional
 
 import torch
