@@ -118,6 +118,17 @@ class BenchmarkTaskConfig(BaseModel):
     type: str = Field(default="retrieval", description="Task type")
     top_k: int = Field(default=10, gt=0, description="Top K for recall evaluation")
 
+    # Multi-object retrieval specific settings
+    gamma: float = Field(
+        default=1.0, ge=0, description="Co-occurrence penalty exponent"
+    )
+    top_k_per_object: int = Field(
+        default=50, gt=0, description="Top K results per object query"
+    )
+    num_query_objects: int = Field(
+        default=3, gt=0, description="Number of objects to sample from query image"
+    )
+
 
 class BenchmarkConfig(BaseModel):
     """Configuration for benchmark evaluation."""
