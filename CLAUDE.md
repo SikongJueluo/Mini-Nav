@@ -52,11 +52,15 @@
   - train.py — 压缩器训练脚本
 - mini-nav/data_loading/ — 数据加载与合成
   - loader.py — 数据加载器
+  - insdet_scenes.py — InsDet场景数据集加载
   - synthesizer.py — 场景合成器
 - mini-nav/utils/ — 工具函数
   - feature_extractor.py — 特征提取工具
+  - sam.py — SAM 2.1 分割工具
 - mini-nav/tests/ — pytest 测试集
 - mini-nav/benchmarks/ — 基准测试 (recall@k)
+  - tasks/
+    - multi_object_retrieval.py — 多目标检索基准任务
 - mini-nav/visualizer/ — Dash + Plotly 可视化应用
 
 **数据目录**
