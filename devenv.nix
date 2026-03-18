@@ -19,7 +19,7 @@ in {
   ];
 
   enterShell = ''
-    export UV_PROJECT_ENVIRONMENT=$HOME/local/share/mamba/envs/mini-nav/bin/
+    export UV_PROJECT_ENVIRONMENT=$HOME/.local/share/mamba/envs/mini-nav/
 
     eval "$(micromamba shell hook --shell bash)"
     micromamba activate mini-nav

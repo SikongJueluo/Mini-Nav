@@ -9,6 +9,10 @@ upload:
     --exclude='data/versioned_data/' \
     . ial-jumper-ial-pangyg:/home/ial-pangyg/docker-workspace/projects/mini-nav/
 
+download:
+    rsync -avLh --progress --stats --itemize-changes \
+    ial-jumper-ial-pangyg:/home/ial-pangyg/docker-workspace/projects/mini-nav/outputs .
+
 sync-pkgs:
     export UV_PROJECT_ENVIRONMENT="/workspace/envs/mini-nav/" && uv sync --inexact
 
