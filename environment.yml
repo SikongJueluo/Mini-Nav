@@ -1,0 +1,19 @@
+name: mini-nav
+channels:
+    - pytorch
+    - nvidia
+    - conda-forge
+    - aihabitat-nightly
+dependencies:
+    - python=3.10
+    - pip
+    - habitat-sim=0.3.3
+    - withbullet
+    - pytorch
+    - torchvision
+    - pytorch-cuda=12.1
+    # Toolsets
+    - uv
+    - just
+    - git
+    - git-lfs

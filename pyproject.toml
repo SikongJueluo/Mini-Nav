@@ -3,24 +3,18 @@ name = "mini-nav"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
-    "accelerate>=1.12.0",
     "dash>=3.4.0",
     "dash-ag-grid>=33.3.3",
     "dash-mantine-components>=2.5.1",
     "datasets>=4.5.0",
-    "habitat-baselines>=0.3.320250127",
-    "habitat-lab>=0.3.320250127",
-    "habitat-sim-uv-wheels-experimental>=0.2.2a2",
     "httpx[socks]>=0.28.1",
     "lancedb>=0.27.1",
     "polars[database,numpy,pandas,pydantic]>=1.37.1",
     "pyarrow>=23.0.0",
     "pydantic>=2.12.5",
     "scikit-learn>=1.7.2",
-    "torch>=2.10.0",
-    "torchvision>=0.25.0",
     "transformers>=5.0.0",
     "typer>=0.24.1",
 ]
@@ -28,21 +22,9 @@ dependencies = [
 [dependency-groups]
 dev = [
     "basedpyright>=1.37.4",
+    "pip>=26.0.1",
     "pytest>=9.0.2",
     "pytest-mpi>=0.6",
-]
-
-[[tool.uv.index]]
-name = "pytorch-cu130"
-url = "https://download.pytorch.org/whl/cu130"
-explicit = true
-
-[tool.uv.sources]
-torch = [
-    { index = "pytorch-cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-]
-torchvision = [
-    { index = "pytorch-cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
 ]
 
 [tool.ty.environment]
